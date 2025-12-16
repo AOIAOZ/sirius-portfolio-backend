@@ -5,7 +5,6 @@ from rest_framework import status, generics
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import StudentProfileSerializer, DocumentSerializer
-from ml.main import recognize
 
 
 class MyProfileView(generics.RetrieveUpdateAPIView):
@@ -46,7 +45,11 @@ class DocumentUploadView(APIView):
                 image_bytes = document.file.read()
                 document.file.close()
 
-                recognized_text = asyncio.run(recognize(image_bytes=image_bytes))
+                # recognized_text = asyncio.run(recognize(image_bytes=image_bytes))
+                def recognize(k):
+                    """Mocked"""
+                    return k
+                recognized_text = recognize(image_bytes=image_bytes)
 
                 if recognized_text:
                     document.recognized_text = recognized_text
