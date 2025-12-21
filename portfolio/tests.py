@@ -74,8 +74,8 @@ class PortfolioTests(APITestCase):
 
         # Проверяем, что ачивка создалась и привязалась к юзеру
         achievement = Achievement.objects.get(title="Hackathon Winner")
-        self.assertTrue(self.user in achievement.users.all())
-        self.assertTrue(self.tag_science in achievement.tags.all())
+        self.assertIn(self.user, achievement.users.all())
+        self.assertIn(self.tag_science, achievement.tags.all())
 
     def test_security_edit_others_achievement(self):
         """Тест безопасности: нельзя редактировать чужую ачивку"""
