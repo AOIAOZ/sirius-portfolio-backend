@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import StudentProfile, Document, Achievement
 from users.models import CustomUser
+from tags.models import Tag
 
 
 class StudentProfileSerializer(serializers.ModelSerializer):
@@ -52,9 +53,14 @@ class UserShortSerializer(serializers.ModelSerializer):
 
 
 class AchievementSerializer(serializers.ModelSerializer):
-    users = UserShortSerializer(many=True, read_only=True)
+    tags = serializers.SlugRelatedField(
+        many=True,
+        slug_field='value',
+        queryset=Tag.objects.all(),
+        required=False
+    )
 
     class Meta:
         model = Achievement
-        fields = ['id', 'title', 'description', 'file', 'is_verified', 'created_at']
+        fields = ['id', 'title', 'description', 'file', 'is_verified', 'created_at', 'tags']
         read_only_fields = ['id', 'is_verified', 'created_at']

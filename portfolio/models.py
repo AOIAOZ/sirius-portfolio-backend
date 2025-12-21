@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import CustomUser
+from tags.models import Tag
 
 
 class StudentProfile(models.Model):
@@ -29,22 +30,17 @@ class Document(models.Model):
 
 
 class Achievement(models.Model):
-    """Модель достижения."""
     users = models.ManyToManyField(CustomUser, related_name='achievements', verbose_name="Пользователи")
+
+    tags = models.ManyToManyField(Tag, blank=True, related_name='achievements', verbose_name="Теги")
 
     title = models.CharField(max_length=255, verbose_name="Название")
     description = models.TextField(blank=True, verbose_name="Описание/Комментарии")
-    file = models.FileField(upload_to='achievements/',
-                            null=True, blank=True, verbose_name="Файл подтверждения")
+    file = models.FileField(upload_to='achievements/', null=True,
+                            blank=True, verbose_name="Файл подтверждения")
 
-    # Статус верификации
     is_verified = models.BooleanField(default=False, verbose_name="Подтверждено")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
     def __str__(self):
-        count = self.users.count()
-        if count > 0:
-            first_user = self.users.first().username
-            suffix = f" и еще {count - 1}" if count > 1 else ""
-            return f"{self.title} ({first_user}{suffix})"
         return self.title
