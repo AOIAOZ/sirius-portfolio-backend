@@ -19,6 +19,10 @@ class MyProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user.studentprofile
 
+    def post(self, request, *args, **kwargs):
+        """Эмуляция PUT через POST."""
+        return self.update(request, *args, partial=True, **kwargs)
+
 
 class DocumentUploadView(APIView):
     """
@@ -118,7 +122,7 @@ class UserProfileDetailView(generics.RetrieveUpdateAPIView):
 
     def post(self, request, *args, **kwargs):
         """Эмуляция PUT через POST для совместимости."""
-        return self.update(request, *args, **kwargs)
+        return self.update(request, *args, partial=True, **kwargs)
 
 
 class CreateAchievementView(generics.CreateAPIView):

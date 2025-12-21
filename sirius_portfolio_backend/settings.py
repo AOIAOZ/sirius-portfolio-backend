@@ -61,17 +61,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sirius_portfolio_backend.wsgi.application'
 
-# Database PostgreSQL
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': '5432',
+# Проверяем, есть ли переменная DB_NAME (значит мы в Docker или на проде)
+if os.environ.get('DB_NAME'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASS'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': '5432',
+        }
     }
-}
+else:
+    # Иначе используем SQLite (для локальных тестов и разработки)
+    print("⚠️  DB_NAME not found. Using SQLite for local development.")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
