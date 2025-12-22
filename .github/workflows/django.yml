@@ -7,14 +7,28 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
     environment: default
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.13]
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +45,7 @@ jobs:
           python manage.py test
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DB_HOST: ${{ vars.DB_HOST }}
+          DB_HOST: postgres
           DB_NAME: ${{ secrets.POSTGRES_DB }}
           DB_USER: ${{ secrets.POSTGRES_USER }}
           DB_PASS: ${{ secrets.POSTGRES_PASSWORD }}
