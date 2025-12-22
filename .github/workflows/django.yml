@@ -38,18 +38,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           
-      - name: Wait for PostgreSQL
-        run: |
-          # Wait for postgres service to be healthy
-          for i in {1..30}; do
-            if docker compose ps --services --filter "health=healthy" | grep -q postgres; then
-              echo "PostgreSQL is healthy!"
-              break
-            fi
-            echo "Waiting for PostgreSQL... ($i/30)"
-            sleep 2
-          done
-          
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
