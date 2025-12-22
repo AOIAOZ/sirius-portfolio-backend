@@ -2,9 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "shvdev1-b2d4755-patch" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "shvdev1-b2d4755-patch" ]
 
 jobs:
   test:
