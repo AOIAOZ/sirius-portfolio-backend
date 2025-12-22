@@ -71,6 +71,11 @@ if os.environ.get('DB_NAME'):
             'PASSWORD': os.environ.get('DB_PASS'),
             'HOST': os.environ.get('DB_HOST'),
             'PORT': '5432',
+            'TEST': {
+                'NAME': os.getenv('DB_TEST_NAME', f'test_{os.getenv("DB_NAME")}'),
+                # Skip 'postgres' DB check - use existing DB directly
+                'SERIALIZE': False,
+            },
         }
     }
 else:
