@@ -76,6 +76,10 @@ if os.environ.get('DB_NAME'):
                 # Skip 'postgres' DB check - use existing DB directly
                 'SERIALIZE': False,
             },
+            'OPTIONS': {
+                # Disable connection to 'postgres' admin DB during tests
+                'TEST_NO_DB_CURSOR': True,
+            },
         }
     }
 else:
